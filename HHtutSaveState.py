@@ -15,7 +15,7 @@ try:
 except:
     pass
 
-# pcid = 0
+pcid = 0
 # pc = h.ParallelContext()
 # pcid = pc.id()
 # nhost =pc.nhost()

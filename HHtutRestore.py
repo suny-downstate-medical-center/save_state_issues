@@ -17,6 +17,7 @@ try:
 except:
     pass
 
+pcid = 0
 # pc = h.ParallelContext()
 # pcid = pc.id()
 # nhost =pc.nhost()
@@ -203,7 +204,7 @@ elif whichRestore == 'manual':
     fih = h.FInitializeHandler(1, restoreSim)
 h.finitialize()
 
-# h.continuerun(100)
+h.continuerun(tstop)
 
 # while h.t < tstop:
 #     # pc.psolve(h.t + h.dt)
