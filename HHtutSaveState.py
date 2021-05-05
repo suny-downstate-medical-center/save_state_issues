@@ -9,7 +9,7 @@ h.load_file('stdrun.hoc')
 
 
 whichSave = 'savestate' # alternatively 'bbsavestate' 'manual'
-outdir = 'saveStateDebug/orig_save_state/'
+outdir = 'saveStateDebug/nosave/'
 try:
     os.makedirs(outdir)
 except:
@@ -191,7 +191,7 @@ elif whichSave == 'manual':
     saveRxd()
     saveVs()
 
-h.continuerun(30)
+h.continuerun(100)
 
 # plotting 
 fig = pyplot.figure()
