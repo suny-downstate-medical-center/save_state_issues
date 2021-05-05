@@ -104,8 +104,8 @@ na = rxd.Species([cyt, mem], name='na', d=1, charge=1, initial=10)
 k = rxd.Species([cyt, mem], name='k', d=1, charge=1, initial=54.4)
 
 # extracellular parameters provide a constant concentration for the Nernst potential and reactions.
-kecs = rxd.Parameter(ecs, name='k_ecs', charge=1, value=2.5)
-naecs = rxd.Parameter(ecs, name='na_ecs', charge=1, value=140)
+kecs = rxd.Parameter(ecs, name='k', charge=1, value=2.5)
+naecs = rxd.Parameter(ecs, name='na', charge=1, value=140)
 
 # an undistinguished charged ion for the leak current
 x = rxd.Species([cyt, mem, ecs], name='x', charge=1) 
