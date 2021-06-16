@@ -8,21 +8,21 @@ import numpy
 import os 
 h.load_file('stdrun.hoc')
 
-whichRestore = 'savestate' # alternatively 'bbsavestate' 'manual'
-restoredir = 'saveStateDebug/orig_save_state/'
-outdir = 'saveStateDebug/restore/'
+outdir = 'saveStateDebug/restore_run70_ssupdate/'
+restoredir = 'saveStateDebug/save_state_rxd/'
 
 try:
     os.makedirs(outdir)
 except:
     pass
 
-pcid = 0
 # pc = h.ParallelContext()
 # pcid = pc.id()
 # nhost =pc.nhost()
 # pc.timeout(0)
 # pc.set_maxstep(100)
+pcid = 0
+
 
 endt = 70
 tstop = 100 
@@ -46,27 +46,28 @@ def runSS():
     svst.fwrite(f)
 
 def restoreSim():
-    dat_v = numpy.load(os.path.join(restoredir, 'pcid'+str(pcid)+'_allv.npy'))
-    ind = 0
-    for sec in h.allsec():
-        for seg in sec.allseg():
-            seg.v = dat_v[ind]
-            ind = ind + 1
-    print('Restored voltages from pcid'+str(pcid)+'_allv.npy')
-
+    # dat_v = numpy.load(os.path.join(restoredir, 'pcid'+str(pcid)+'_allv.npy'))
+    # ind = 0
+    # for sec in h.allsec():
+    #     for seg in sec.allseg():
+    #         seg.v = dat_v[ind]
+    #         ind = ind + 1
+    # print('Restored voltages from pcid'+str(pcid)+'_allv.npy')
+    
     for sp in rxd.species._all_species:
         s = sp()
         print(s.name)
         temp = numpy.load(os.path.join(restoredir, s.name + '_concentrations_' + str(pcid) + '.npy'))
         s.nodes.concentration = list(temp)
         print('PCID ' + str(pcid) + ': resotred ' + s.name)
+    restoreSS()
 
-    h.t = endt
+    # h.t = endt
 
 def restoreSS():
     svst = h.SaveState()
     f = h.File(os.path.join(restoredir, 'save_test_'+str(pcid) + '.dat'))
-    svst.read(f)
+    svst.fread(f)
     svst.restore()
 
 # parameters
@@ -198,18 +199,15 @@ hvecA = h.Vector().record(hgate[cyt].nodes(somaA(0.5))._ref_value)
 kvecA = h.Vector().record(somaA(0.5)._ref_ik)
 navecA = h.Vector().record(somaA(0.5)._ref_ina)
 
-if whichRestore == 'savestate':
-    fih = h.FInitializeHandler(1, restoreSS)
-elif whichRestore == 'manual':
-    fih = h.FInitializeHandler(1, restoreSim)
+fih = h.FInitializeHandler(1, restoreSim)
 h.finitialize()
 
-h.continuerun(tstop)
+# h.continuerun(100)
 
-# while h.t < tstop:
-#     # pc.psolve(h.t + h.dt)
-#     h.fadvance()
-# #     print(h.t)
+while h.t < tstop:
+    # pc.psolve(h.t + h.dt)
+    h.fadvance()
+#     print(h.t)
 
 # # plotting 
 # fig = pyplot.figure()

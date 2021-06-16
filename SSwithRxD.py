@@ -9,7 +9,7 @@ h.load_file('stdrun.hoc')
 
 
 whichSave = 'savestate' # alternatively 'bbsavestate' 'manual'
-outdir = 'saveStateDebug/nosave/'
+outdir = 'saveStateDebug/save_state_rxd/'
 try:
     os.makedirs(outdir)
 except:
@@ -185,6 +185,7 @@ h.continuerun(70)
 
 if whichSave == 'savestate':
     runSS()
+    saveRxd()
 elif whichSave == 'bbsavestate':
     runBBSS()
 elif whichSave == 'manual':
