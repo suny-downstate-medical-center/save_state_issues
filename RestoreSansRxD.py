@@ -1,7 +1,4 @@
 from neuron import h, crxd as rxd
-from neuron.crxd import v
-from neuron.crxd.rxdmath import vtrap, exp, log
-from math import pi
 from matplotlib import pyplot
 # pyplot.ion()
 import numpy 
@@ -87,63 +84,63 @@ stimB.amp = 1
 stimB.dur = 50
 
 # record
+tvec = h.Vector().record(h._ref_t)
 vvecB = h.Vector().record(somaB(0.5)._ref_v)
 kvecB = h.Vector().record(somaB(0.5)._ref_ik)
 navecB = h.Vector().record(somaB(0.5)._ref_ina)
 mvecB = h.Vector().record(somaB(0.5).hh._ref_m)
 nvecB = h.Vector().record(somaB(0.5).hh._ref_n)
 hvecB = h.Vector().record(somaB(0.5).hh._ref_h)
-tvec = h.Vector().record(h._ref_t)
 
 fih = h.FInitializeHandler(1, restoreSS)
 h.finitialize()
 
-# h.continuerun(100)
+h.continuerun(100)
 
 # while h.t < tstop:
 #     # pc.psolve(h.t + h.dt)
 #     h.fadvance()
 #     print(h.t)
 
-# # plotting 
-# fig = pyplot.figure()
+# plotting 
+fig = pyplot.figure()
 # pyplot.plot(tvec, vvecA, label="rxd")
-# # pyplot.plot(tvec, vvecB, label="mod")
-# pyplot.xlabel('t (ms)')
-# pyplot.ylabel('V$_m$ (mV)')
-# pyplot.legend(frameon=False)
-# # pyplot.savefig(os.path.join(outdir, 'fig1.png'))
+pyplot.plot(tvec, vvecB, label="mod")
+pyplot.xlabel('t (ms)')
+pyplot.ylabel('V$_m$ (mV)')
+pyplot.legend(frameon=False)
+pyplot.savefig(os.path.join(outdir, 'fig1.png'))
 
-# fig = pyplot.figure()
+fig = pyplot.figure()
 # pyplot.plot(tvec, hvecA, '-b', label='h')
 # pyplot.plot(tvec, mvecA, '-r', label='m')
 # pyplot.plot(tvec, nvecA, '-g', label='n')
-# # pyplot.plot(tvec, hvecB, ':b')
-# # pyplot.plot(tvec, mvecB, ':r')
-# # pyplot.plot(tvec, nvecB, ':g')
-# pyplot.xlabel('t (ms)')
-# pyplot.ylabel('state')
-# pyplot.legend(frameon=False)
-# # pyplot.savefig(os.path.join(outdir, 'fig2.png'))
+pyplot.plot(tvec, hvecB, ':b')
+pyplot.plot(tvec, mvecB, ':r')
+pyplot.plot(tvec, nvecB, ':g')
+pyplot.xlabel('t (ms)')
+pyplot.ylabel('state')
+pyplot.legend(frameon=False)
+pyplot.savefig(os.path.join(outdir, 'fig2.png'))
 
 
-# fig = pyplot.figure()
+fig = pyplot.figure()
 # pyplot.plot(tvec, kvecA.as_numpy(), '-b', label='k')
 # pyplot.plot(tvec, navecA.as_numpy(), '-r', label='na')
-# # pyplot.plot(tvec, kvecB, ':b')
-# # pyplot.plot(tvec, navecB, ':r')
-# pyplot.xlabel('t (ms)')
-# pyplot.ylabel('current (mA/cm$^2$)')
-# pyplot.legend(frameon=False)
-# # pyplot.savefig(os.path.join(outdir, 'fig3.png'))
+pyplot.plot(tvec, kvecB, ':b', label='k')
+pyplot.plot(tvec, navecB, ':r', label='na')
+pyplot.xlabel('t (ms)')
+pyplot.ylabel('current (mA/cm$^2$)')
+pyplot.legend(frameon=False)
+pyplot.savefig(os.path.join(outdir, 'fig3.png'))
 
-# out = {'kvec' : kvecA.as_numpy(),
-#     'navec' : navecA.as_numpy(),
-#     'tvec' : tvec.as_numpy(),
-#     'hvec' : hvecA.as_numpy(),
-#     'mvec' : mvecA.as_numpy(),
-#     'nvec' : nvecA.as_numpy(),
-#     'vvec' : vvecA.as_numpy()}
+out = {'kvec' : kvecB.as_numpy(),
+    'navec' : navecB.as_numpy(),
+    'tvec' : tvec.as_numpy(),
+    'hvec' : hvecB.as_numpy(),
+    'mvec' : mvecB.as_numpy(),
+    'nvec' : nvecB.as_numpy(),
+    'vvec' : vvecB.as_numpy()}
 
-# from scipy.io import savemat
-# savemat(os.path.join(outdir, 'data.mat'), out)
+from scipy.io import savemat
+savemat(os.path.join(outdir, 'data.mat'), out)

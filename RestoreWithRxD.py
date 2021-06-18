@@ -1,14 +1,12 @@
 from neuron import h, crxd as rxd
 from neuron.crxd import v
 from neuron.crxd.rxdmath import vtrap, exp, log
-from math import pi
 from matplotlib import pyplot
-# pyplot.ion()
 import numpy 
 import os 
 h.load_file('stdrun.hoc')
 
-outdir = 'saveStateDebug/restore_run70_ssupdate/'
+outdir = 'saveStateDebug/restore_run70_rxd/'
 restoredir = 'saveStateDebug/save_state_rxd/'
 
 try:
@@ -22,10 +20,6 @@ except:
 # pc.timeout(0)
 # pc.set_maxstep(100)
 pcid = 0
-
-
-endt = 70
-tstop = 100 
 
 def saveRxd():
     for sp in rxd.species._all_species:
@@ -53,14 +47,13 @@ def restoreSim():
     #         seg.v = dat_v[ind]
     #         ind = ind + 1
     # print('Restored voltages from pcid'+str(pcid)+'_allv.npy')
-    
+    restoreSS()
     for sp in rxd.species._all_species:
         s = sp()
         print(s.name)
         temp = numpy.load(os.path.join(restoredir, s.name + '_concentrations_' + str(pcid) + '.npy'))
         s.nodes.concentration = list(temp)
         print('PCID ' + str(pcid) + ': resotred ' + s.name)
-    restoreSS()
 
     # h.t = endt
 
@@ -100,8 +93,8 @@ ninf = alpha/(alpha + beta)
 
 somaA = h.Section('somaA')
 somaA.pt3dclear()
-somaA.pt3dadd(-90,0,0,30)
-somaA.pt3dadd(-60,0,0,30)
+somaA.pt3dadd(90,0,0,30)
+somaA.pt3dadd(60,0,0,30)
 somaA.nseg = 11
 
 # somaB = h.Section('somaB')
@@ -191,7 +184,6 @@ stimA.dur = 50
 # tvec = h.Vector().record(h._ref_t)
 
 tvec = h.Vector().record(h._ref_t)
-
 vvecA = h.Vector().record(somaA(0.5)._ref_v)
 mvecA = h.Vector().record(mgate[cyt].nodes(somaA(0.5))._ref_value)
 nvecA = h.Vector().record(ngate[cyt].nodes(somaA(0.5))._ref_value)
@@ -199,47 +191,47 @@ hvecA = h.Vector().record(hgate[cyt].nodes(somaA(0.5))._ref_value)
 kvecA = h.Vector().record(somaA(0.5)._ref_ik)
 navecA = h.Vector().record(somaA(0.5)._ref_ina)
 
-fih = h.FInitializeHandler(1, restoreSim)
+fih = h.FInitializeHandler(1, restoreSS)
 h.finitialize()
 
-# h.continuerun(100)
+h.continuerun(100)
 
-while h.t < tstop:
-    # pc.psolve(h.t + h.dt)
-    h.fadvance()
+# while h.t < tstop:
+#     # pc.psolve(h.t + h.dt)
+#     h.fadvance()
 #     print(h.t)
 
 # # plotting 
-# fig = pyplot.figure()
-# pyplot.plot(tvec, vvecA, label="rxd")
-# # pyplot.plot(tvec, vvecB, label="mod")
-# pyplot.xlabel('t (ms)')
-# pyplot.ylabel('V$_m$ (mV)')
-# pyplot.legend(frameon=False)
-# # pyplot.savefig(os.path.join(outdir, 'fig1.png'))
+fig = pyplot.figure()
+pyplot.plot(tvec, vvecA, label="rxd")
+# pyplot.plot(tvec, vvecB, label="mod")
+pyplot.xlabel('t (ms)')
+pyplot.ylabel('V$_m$ (mV)')
+pyplot.legend(frameon=False)
+pyplot.savefig(os.path.join(outdir, 'fig1.png'))
 
-# fig = pyplot.figure()
-# pyplot.plot(tvec, hvecA, '-b', label='h')
-# pyplot.plot(tvec, mvecA, '-r', label='m')
-# pyplot.plot(tvec, nvecA, '-g', label='n')
-# # pyplot.plot(tvec, hvecB, ':b')
-# # pyplot.plot(tvec, mvecB, ':r')
-# # pyplot.plot(tvec, nvecB, ':g')
-# pyplot.xlabel('t (ms)')
-# pyplot.ylabel('state')
-# pyplot.legend(frameon=False)
-# # pyplot.savefig(os.path.join(outdir, 'fig2.png'))
+fig = pyplot.figure()
+pyplot.plot(tvec, hvecA, '-b', label='h')
+pyplot.plot(tvec, mvecA, '-r', label='m')
+pyplot.plot(tvec, nvecA, '-g', label='n')
+# pyplot.plot(tvec, hvecB, ':b')
+# pyplot.plot(tvec, mvecB, ':r')
+# pyplot.plot(tvec, nvecB, ':g')
+pyplot.xlabel('t (ms)')
+pyplot.ylabel('state')
+pyplot.legend(frameon=False)
+pyplot.savefig(os.path.join(outdir, 'fig2.png'))
 
 
-# fig = pyplot.figure()
-# pyplot.plot(tvec, kvecA.as_numpy(), '-b', label='k')
-# pyplot.plot(tvec, navecA.as_numpy(), '-r', label='na')
-# # pyplot.plot(tvec, kvecB, ':b')
-# # pyplot.plot(tvec, navecB, ':r')
-# pyplot.xlabel('t (ms)')
-# pyplot.ylabel('current (mA/cm$^2$)')
-# pyplot.legend(frameon=False)
-# # pyplot.savefig(os.path.join(outdir, 'fig3.png'))
+fig = pyplot.figure()
+pyplot.plot(tvec, kvecA.as_numpy(), '-b', label='k')
+pyplot.plot(tvec, navecA.as_numpy(), '-r', label='na')
+# pyplot.plot(tvec, kvecB, ':b')
+# pyplot.plot(tvec, navecB, ':r')
+pyplot.xlabel('t (ms)')
+pyplot.ylabel('current (mA/cm$^2$)')
+pyplot.legend(frameon=False)
+pyplot.savefig(os.path.join(outdir, 'fig3.png'))
 
 out = {'kvec' : kvecA.as_numpy(),
     'navec' : navecA.as_numpy(),

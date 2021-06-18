@@ -1,7 +1,6 @@
 from neuron import h, crxd as rxd
 from neuron.crxd import v
 from neuron.crxd.rxdmath import vtrap, exp, log
-from math import pi
 from matplotlib import pyplot
 import numpy 
 import os 
@@ -21,8 +20,6 @@ pcid = 0
 # nhost =pc.nhost()
 # pc.timeout(0)
 # pc.set_maxstep(100)
-
-tstop = 100
 
 def saveRxd():
     for sp in rxd.species._all_species:
@@ -76,8 +73,8 @@ ninf = alpha/(alpha + beta)
 
 somaA = h.Section('somaA')
 somaA.pt3dclear()
-somaA.pt3dadd(-90,0,0,30)
-somaA.pt3dadd(-60,0,0,30)
+somaA.pt3dadd(90,0,0,30)
+somaA.pt3dadd(60,0,0,30)
 somaA.nseg = 11
 
 ###### uncomment to add traditional cell ######
@@ -161,7 +158,6 @@ stimA.dur = 50
 
 # record
 tvec = h.Vector().record(h._ref_t)
-
 vvecA = h.Vector().record(somaA(0.5)._ref_v)
 mvecA = h.Vector().record(mgate[cyt].nodes(somaA(0.5))._ref_value)
 nvecA = h.Vector().record(ngate[cyt].nodes(somaA(0.5))._ref_value)
@@ -176,8 +172,6 @@ navecA = h.Vector().record(somaA(0.5)._ref_ina)
 # mvecB = h.Vector().record(somaB(0.5).hh._ref_m)
 # nvecB = h.Vector().record(somaB(0.5).hh._ref_n)
 # hvecB = h.Vector().record(somaB(0.5).hh._ref_h)
-
-tvec = h.Vector().record(h._ref_t)
 
 h.finitialize(-70)
 

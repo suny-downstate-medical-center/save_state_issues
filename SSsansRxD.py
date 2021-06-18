@@ -1,7 +1,5 @@
 from neuron import h, crxd as rxd
 from neuron.crxd import v
-from neuron.crxd.rxdmath import vtrap, exp, log
-from math import pi
 from matplotlib import pyplot
 import numpy 
 import os 
@@ -52,8 +50,8 @@ h.celsius = 6.3
 ###### uncomment to add traditional cell ######
 somaB = h.Section('somaB')
 somaB.pt3dclear()
-somaB.pt3dadd(-90,0,0,30)
-somaB.pt3dadd(-60,0,0,30)
+somaB.pt3dadd(90,0,0,30)
+somaB.pt3dadd(60,0,0,30)
 somaB.nseg = 11
 
 ###### uncomment to add traditional cell ######
@@ -67,8 +65,6 @@ stimB.dur = 50
 
 # record
 tvec = h.Vector().record(h._ref_t)
-
-###### uncomment to add traditional cell ######
 vvecB = h.Vector().record(somaB(0.5)._ref_v)
 kvecB = h.Vector().record(somaB(0.5)._ref_ik)
 navecB = h.Vector().record(somaB(0.5)._ref_ina)
