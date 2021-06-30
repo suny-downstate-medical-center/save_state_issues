@@ -1,4 +1,4 @@
-from mpi4py import MPI
+# from mpi4py import MPI
 from neuron import h 
 h.load_file('stdrun.hoc')
 
@@ -9,3 +9,5 @@ pc.timeout(0)
 pc.set_maxstep(100)
 
 print("I am " + str(pcid))
+
+h.quit()
