@@ -7,8 +7,8 @@ h.load_file('stdrun.hoc')
 
 
 whichSave = 'savestate' # alternatively 'bbsavestate' 'manual'
-outdir = 'saveStateDebug/save_state_mod_mpi/' #'saveStateDebug/mpi_restore/' #
-restoredir =  None # assign a path to restore sim from saved state 'saveStateDebug/save_state_mod_mpi/' #
+outdir = 'saveStateDebug/mpi_restore/' # 'saveStateDebug/save_state_mod_mpi/' #
+restoredir = 'saveStateDebug/save_state_mod_mpi/' # None # assign a path to restore sim from saved state 
 
 try:
     os.makedirs(outdir)
